@@ -24,7 +24,7 @@ public class UserValidator {
         if (user.getEmail() == null || !EMAIL_PATTERN.matcher(user.getEmail()).matches()) {
             throw new UserValidationException("El correo no es válido");
         }
-        if (user.getBaseSalary() == null || user.getBaseSalary().compareTo(BigDecimal.ZERO) <= 0) {
+        if (user.getBaseSalary() == null || user.getBaseSalary().compareTo(BigDecimal.ZERO) <= 0 ) {
             throw new UserValidationException("El salario base debe ser mayor a cero");
         }
         if (user.getRole() == null || user.getRole().getId() == null) {

@@ -28,5 +28,14 @@ management:
     health:
       probes:
         enabled: true
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  webflux:
+    router: true
 cors:
   allowed-origins: "http://localhost:4200,http://localhost:8080"

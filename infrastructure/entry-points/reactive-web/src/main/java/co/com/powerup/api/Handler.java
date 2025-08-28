@@ -5,6 +5,10 @@ import co.com.powerup.api.exception.GlobalExceptionHandler;
 import co.com.powerup.api.mapper.UserMapper;
 import co.com.powerup.usecase.users.GetEmailUserUseCase;
 import co.com.powerup.usecase.users.UserUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +30,16 @@ public class Handler {
   private final UserMapper userMapper;
   private final Validator validator;
 
+  @Operation(
+          summary = "Registrar un nuevo usuario",
+          description = "Recibe un objeto UsuarioRequestDTO y guarda un usuario en el sistema",
+          responses = {
+                  @ApiResponse(responseCode = "200", description = "Usuario guardado correctamente"),
+                  @ApiResponse(responseCode = "400", description = "Error de validación",
+                          content = @Content(mediaType = "application/json",
+                                  schema = @Schema(implementation = String.class)))
+          }
+  )
   public Mono<ServerResponse> createUser(ServerRequest request) {
     return request.bodyToMono(UserRequestDTO.class)
             .flatMap(dto -> {
@@ -67,23 +81,6 @@ public class Handler {
               return ServerResponse.status(400)
                       .contentType(MediaType.APPLICATION_JSON)
                       .bodyValue(response);
-            });
-  }
-
-  public Mono<ServerResponse> getUserByEmail(ServerRequest request) {
-    String email = request.pathVariable("email");
-
-    return getEmailUserUseCase.execute(email)
-            .map(userMapper::toResponse)
-            .flatMap(res -> ServerResponse.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(res))
-            .switchIfEmpty(ServerResponse.notFound().build())
-            .onErrorResume(e -> {
-              log.error("Error obteniendo usuario: {}", e.getMessage(), e);
-              return ServerResponse.status(400)
-                      .contentType(MediaType.APPLICATION_JSON)
-                      .bodyValue("Error al obtener usuario: " + e.getMessage());
             });
   }
 

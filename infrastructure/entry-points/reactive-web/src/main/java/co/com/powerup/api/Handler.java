@@ -3,7 +3,6 @@ package co.com.powerup.api;
 import co.com.powerup.api.dto.UserRequestDTO;
 import co.com.powerup.api.exception.GlobalExceptionHandler;
 import co.com.powerup.api.mapper.UserMapper;
-import co.com.powerup.usecase.users.GetEmailUserUseCase;
 import co.com.powerup.usecase.users.UserUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,7 +25,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class Handler {
   private final UserUseCase userUseCase;
-  private final GetEmailUserUseCase getEmailUserUseCase;
   private final UserMapper userMapper;
   private final Validator validator;
 

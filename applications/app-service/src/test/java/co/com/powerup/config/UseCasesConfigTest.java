@@ -1,11 +1,15 @@
 package co.com.powerup.config;
 
+import co.com.powerup.model.rol.gateways.RolRepository;
+import co.com.powerup.model.users.gateways.UsersRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+
 
 public class UseCasesConfigTest {
 
@@ -29,6 +33,16 @@ public class UseCasesConfigTest {
     @Configuration
     @Import(UseCasesConfig.class)
     static class TestConfig {
+
+        @Bean
+        public UsersRepository userRepository() {
+            return mock(UsersRepository.class);
+        }
+
+        @Bean
+        public RolRepository rolRepository() {
+            return mock(RolRepository.class);
+        }
 
         @Bean
         public MyUseCase myUseCase() {

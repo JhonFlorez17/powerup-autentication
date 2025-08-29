@@ -2,12 +2,18 @@ package co.com.powerup.api.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Schema (description = "Request para crear un usuario")
 public class UserRequestDTO {
 
@@ -24,6 +30,7 @@ public class UserRequestDTO {
   private String address;
 
   @Pattern(regexp = "^[0-9+\\- ]{7,20}$", message = "El teléfono no es válido")
+  @Schema(description = "Telefono ceular", example = "3156667777")
   private String phone;
 
   @NotBlank(message = "El correo es obligatorio")

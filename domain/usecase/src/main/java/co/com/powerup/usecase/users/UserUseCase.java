@@ -14,18 +14,17 @@ public class UserUseCase {
   private final RolRepository rolRepository;
 
   public Mono<Users> execute(Users user) {
-
     UserValidator.validate(user);
 
     return userRepository.findByEmail(user.getEmail())
-            .flatMap(existing -> {
-              if (existing != null) {
-                return Mono.error(new UserValidationException("El email ya está registrado"));
-              }
-              return Mono.empty();
-            })
-            .then(rolRepository.findByIdRol(user.getRole().getId())
-                    .switchIfEmpty(Mono.error(new UserValidationException("El rol asignado no existe"))))
-            .then(userRepository.saveUser(user));
+      .flatMap(existing -> Mono.<Users>error(new UserValidationException("El email ya está registrado")))
+      .switchIfEmpty(
+              rolRepository.findByIdRol(user.getRole().getId())
+                      .switchIfEmpty(Mono.error(new UserValidationException("El rol asignado no existe")))
+                      .flatMap(rol -> {
+                        Users userWithRol = user.toBuilder().role(rol).build();
+                        return userRepository.saveUser(userWithRol);
+                      })
+      );
   }
 }

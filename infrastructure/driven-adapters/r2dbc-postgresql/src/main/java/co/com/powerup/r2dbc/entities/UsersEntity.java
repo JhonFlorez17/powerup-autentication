@@ -1,5 +1,8 @@
 package co.com.powerup.r2dbc.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -11,6 +14,9 @@ import java.time.LocalDateTime;
 
 @Data
 @Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UsersEntity {
 
   @Id
